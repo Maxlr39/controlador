@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+proyecto1
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrimb-item active">Modulos/</li>
+<li class="breadcrumb-item active"><a href="{% url 'home' %}">{{project.name}}</a></li>
+{% endblock %}
+
+{% block content %}
+
+<table class="table">
+    <thead class="thead-inverse">
+        <tr>
+            <th>Modulo</th>
+            <th>Creador</th>
+            <th>Descripción</th>
+            <th>Fecha de inicio</th>
+            <th>Fecha de entrega</th>
+            <th>Actividades</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for module in project.modules.all %}
+        <tr>
+            <td>{{ module.name }}</td>
+            <td>{{ module.starter.username }}</td>
+            <td>{{module.description }}</td>
+            <td>{{module.start_date }}</td>
+            <td>{{module.submission_deadline }}</td>
+            <td><a href="{% url 'module_activities' project.pk module.pk %}" class="btn btn-success">ver</a></td>
+            
+            <td>{{module.status}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+<div class="mb-4">
+    <a href="{% url 'new_module' project.pk %}" class="btn btn-success">Agregar nuevo Modulo</a>
+</div>
+
+
+{% endblock %}

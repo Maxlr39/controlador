@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block breadcrumb %}
+<li class="breadcrimb-item active">Home</li>
+{% endblock %}
+
+{% block content %}
+
+<table class="table">
+    <thead class="thead-inverse">
+        <tr class="text-white bg-dark">
+            <th class="align-middle">Proyecto</th>
+            <th class="align-middle">Descripción</th>
+            <th class="align-middle">Fecha de termino</th>
+            <th class="align-middle">Modulos</th>
+            <th class="align-middle">Editar</th>
+        </tr>
+        <thead>
+            <tbody>
+                {% for project in projects %}
+                <tr>
+                    <td>
+                        <a>{{project.name}}</a>
+                         <small class="text-muted d-block">Usuarios asociados</small>
+                    </td>
+                    <td class="align-middle">{{project.description}}</td>
+                    <td class="align-middle">{{project.submission_deadline}}</td>
+                    <td class="align-middle"><input type="button" class ="btn btn-primary" onclick="location.href='{% url 'project_modules' project.pk  %}';" value="Ver" /></td>
+                    <td class="align-middle"><input type="button" class ="btn btn-info" onclick="#" value="Editar" /></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+</table>
+<a href="{% url 'new_project' %}" class="btn btn-success">Agregar Proyecto</a>
+{% endblock %}
+
+
+

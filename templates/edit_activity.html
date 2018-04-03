@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit post{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Project</a></li>
+<li class="breadcrumb-item"><a href="{% url 'detail' activity.task.project.pk %}">{{ activity.task.project.name }}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'task_detail' activity.task.project.pk activity.task.pk %}">{{ activity.task.subject }}</a></li>
+<li class="breadcrumb-item active">Editar</li>
+{% endblock %}
+
+{% block content %}
+<form method="post" class="mb-4" novalidate>
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_message">Descripción</label>
+        <textarea class="form-control" id="id_message" name="message" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Save changes</button>
+    <a href="{% url 'task_detail' activity.task.project.pk activity.task.pk %}" class="btn btn-outline-secondary" role="button">Cancel</a>
+</form>
+{% endblock %}

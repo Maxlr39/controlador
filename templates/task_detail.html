@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ task.subject }}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Projects</a></li>
+<li class="breadcrumb-item"><a href="{% url 'detail' task.project.pk %}">{{ task.project.name }}</a></li>
+<li class="breadcrumb-item active">{{ task.subject }}</li>
+{% endblock %}
+
+{% block content %}
+
+
+
+{% for activity in task.activities.all %}
+<div class="card mb-2">
+    <div class="card-body p-3">
+        <div class="row">
+            <div class="col-2">
+                    <strong class="text-muted">{{ activity.created_by.username }}</strong>
+                    <br><br>
+                    <small>Tareas: {{ activity.created_by.activities.count }}</small>
+                    </div>
+            <div class="col-10">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <strong class="text-muted">{{ task.subject }}</strong>
+                        <br><br>
+                        <p>{{ activity.message }}<br></p>
+                        
+                    </div>
+                    <div class="col-6 text-right">
+                        <small class="text-muted">{{ activity.created_at }}</small>
+                        <br>
+                        <br>
+                        <a href="#" class="btn btn-danger text-white">{{ activity.status }}</a><br><br>
+                    
+                    {% if activity.status == "Pendiente" %}
+                    
+                    <div class="form" id="showtm" style="font-size:21px; font-weight:800;">0 min : 0 sec</div>
+                    <script type="text/javascript">
+                        
+                        // Here set the minutes, seconds, and tenths-of-second when you want the chronometer to stop
+                        // If all these values are set to 0, the chronometer not stop automatically
+                        var stmints = 0;
+                        var stseconds = 0;
+                        var stzecsec = 0;
+                        
+                        // function to be executed when the chronometer stops
+                        //function toAutoStop() {
+                        //alert('Vous avez stoppé le chronomètre');
+                        //}
+                        
+                        // the initial tenths-of-second, seconds, and minutes
+                        var zecsec = 0;
+                        var seconds = 0;
+                        var mints = 0;
+                        
+                        var startchron = 0;
+                        
+                        function chronometer() {
+                            if(startchron == 1) {
+                                seconds += 1;       // set tenths of a second
+                                
+                                // set seconds
+                                //if(zecsec > 9) {
+                                //zecsec = 0;
+                                //seconds += 1;
+                                //}
+                                
+                                // set minutes
+                                if(seconds > 59) {
+                                    seconds = 0;
+                                    mints += 1;
+                                }
+                                
+                                // adds data in #showtm
+                                document.getElementById('showtm').innerHTML = mints+ ' min : '+ seconds + ' sec '    ;
+                                
+                                // if the chronometer reaches to the values for stop, calls whenChrStop(), else, auto-calls chronometer()
+                                if(zecsec == stzecsec && seconds == stseconds && mints == stmints) toAutoStop();
+                                else setTimeout("chronometer()", 1000);
+                            }
+                        }
+                    
+                    function startChr() { startchron = 1; chronometer(); }      // starts the chronometer
+                    function stopChr() { startchron = 0; }                      // stops the chronometer
+                    function resetChr() {
+                        zecsec = 0;  seconds = 0; mints = 0; startchron = 0;
+                        document.getElementById('showtm').innerHTML = mints+ ' min '+ seconds+ ' sec ' + zecsec ;
+                    }
+                    // start the chronometer, delete this line if you want to not automatically start the stopwatch
+                    //startChr();
+                    
+                    document.getElementById('showtm').value=seconds;
+                        </script>
+                    
+                    <p></p>
+                    
+                    <div class="form">
+                        <button onclick="startChr()" class="btn btn-info text-white">Start </button>
+                        <button onclick="stopChr()" class="btn btn-info text-white">Stop</button>
+                    </div>
+                    {% endif %}
+                     <br><br>
+                     <h6>Fecha de entrega</h6>
+                      {{ activity.submission_deadline }}
+                       
+                    </div>
+                </div>
+                               {% if activity.created_by == user %}
+                <div class="mt-3">
+                    
+                    <a href="{% url 'edit_activity' activity.task.project.pk activity.task.pk activity.pk %}" class="btn btn-primary btn-sm" role="button">Edit</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-4">
+    <a href="{% url 'new_task' task.pk %}" class="btn btn-primary" role="button">Agregar Actividad</a>
+</div>
+{% endfor %}
+
+{% endblock %}
+

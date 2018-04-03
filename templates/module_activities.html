@@ -1,0 +1,71 @@
+
+{% extends 'base.html' %}
+
+{% block title %}{{ module.name }}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Project</a></li>
+<li class="breadcrumb-item"><a href="{% url 'project_modules' module.project.pk %}">{{ module.project.name }}</a></li>
+<li class="breadcrumb-item active">{{ module.name }}</li>
+{% endblock %}
+
+{% block content %}
+{% for activity in task.activities.all %}
+<div class="card mb-2">
+    <div class="card-body p-3">
+        <div class="row">
+            <div class="col-2">
+                <strong class="text-muted">{{ activity.created_by.username }}</strong>
+                <br><br>
+                <small>Tareas: {{ activity.created_by.activities.count }}</small>
+            </div>
+            <div class="col-10">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <strong class="text-muted">{{ module.name }}</strong>
+                        <br><br>
+                        <p>{{ activity.description }}<br></p>
+                        
+                    </div>
+                    <div class="col-6 text-right">
+                        <small class="text-muted">{{ activity.created_at }}</small>
+                        <br>
+                        <br>
+                        <a href="#" class="btn btn-danger text-white">{{ activity.status }}</a><br><br>
+                        
+                        {% if activity.status == "Pendiente" %}
+                        {% endif %}
+                        <h6>Fecha de entrega</h6>
+                        {{ activity.submission_deadline }}
+                        
+                    </div>
+                </div>
+                {% if activity.created_by == user %}
+                <div class="mt-3">
+                    <a href="#" class="btn btn-primary btn-sm" role="button">Edit</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mb-4">
+    
+</div>
+{% endfor %}
+
+
+{% if model.work_day_started == False %}
+<a href="{% url 'new_activity' module.pk %}" class="btn btn-primary" role="button">Agregar Actividad </a>
+<a href="{% url 'last_activity' module.pk %}" class="btn btn-danger" role="button">Terminar Jornada </a>
+</form>
+{% else %}
+<a href="{% url 'new_activity' module.pk %}" class="btn btn-primary" role="button">Agregar Actividad </a>
+<a href="{% url 'first_activity' module.pk %}" class="btn btn-success" role="button">Empezar Jornada </a>
+{% endif %}
+{% endblock %}
+
+
+
+
+
